@@ -1,5 +1,0 @@
-/home/warplist/Repos/dotnet_jun/DeliveryApp/DeliveryApp/bin/Release/net8.0/publish/DeliveryApp
-/home/warplist/Repos/dotnet_jun/DeliveryApp/DeliveryApp/bin/Release/net8.0/publish/DeliveryApp.dll
-/home/warplist/Repos/dotnet_jun/DeliveryApp/DeliveryApp/bin/Release/net8.0/publish/DeliveryApp.deps.json
-/home/warplist/Repos/dotnet_jun/DeliveryApp/DeliveryApp/bin/Release/net8.0/publish/DeliveryApp.runtimeconfig.json
-/home/warplist/Repos/dotnet_jun/DeliveryApp/DeliveryApp/bin/Release/net8.0/publish/DeliveryApp.pdb
