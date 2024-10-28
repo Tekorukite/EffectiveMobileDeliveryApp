@@ -6,8 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <PublishSingleFile>true</PublishSingleFile>
-    <PublishTrimmed>true</PublishTrimmed>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <SelfContained>true</SelfContained>
   </PropertyGroup>
 
   <ItemGroup>
