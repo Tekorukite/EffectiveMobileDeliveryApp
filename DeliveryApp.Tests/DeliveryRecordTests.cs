@@ -3,12 +3,14 @@ namespace EffectiveMobile.Tests.DeliveryRecord
     public class DeliveryRecordTest
     {
         [Theory]
-        [InlineData((long)123, (double)3.333, "SomeDistrict", "2024-10-31 12:34:56")]
-        [InlineData((long)2, (double)1.00, "Another District", "2024-10-13 22:22:22")]
-        [InlineData((long)1000000000, (double)0.01, "And-Another-One@Moscow", "2000-01-01 00:00:00")]
-        public void ConstructorValid(long id, double weight, string district, string dateString)
+        [InlineData((ulong)123, (double)3.333, "SomeDistrict", "2024-10-31 12:34:56")]
+        [InlineData((ulong)2, (double)1.00, "Another District", "2024-10-13 22:22:22")]
+        [InlineData((ulong)1000000000, (double)0.01, "And-Another-One@Msc", "2000-01-01 00:00:00")]
+        public void ConstructorValid(ulong id, double weight, string district, string dateString)
         {
-            var record = new EffectiveMobile.DeliveryRecord($"00{id};  {weight} ;{district};{dateString}");
+            var record = new EffectiveMobile.DeliveryRecord(
+                $"00{id};  {weight} ;{district};{dateString}"
+            );
             Assert.Equal(id, record._id);
             Assert.Equal(weight, record._weight);
             Assert.Equal(district, record._cityDistrict);

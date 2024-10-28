@@ -2,7 +2,7 @@ namespace EffectiveMobile
 {
     public class DeliveryRecord
     {
-        internal long _id;
+        internal ulong _id;
         internal double _weight;
         internal string _cityDistrict = "";
         internal DateTime _deliveryDateTime;
@@ -15,14 +15,18 @@ namespace EffectiveMobile
                 throw new InvalidDataException($@"String ""{data}"" can't be parsed.");
             }
 
-            if (!long.TryParse(splitData[0], out _id) || _id < 0)
+            if (!ulong.TryParse(splitData[0], out _id) || _id < 0)
             {
-                throw new InvalidCastException($@"String ""{splitData[0]}"" can't be parsed to long");
+                throw new InvalidCastException(
+                    $@"String ""{splitData[0]}"" can't be parsed to long"
+                );
             }
 
             if (!double.TryParse(splitData[1], out _weight) || _weight < 0.0)
             {
-                throw new InvalidCastException($@"String ""{splitData[1]}"" can't be parsed to double");
+                throw new InvalidCastException(
+                    $@"String ""{splitData[1]}"" can't be parsed to double"
+                );
             }
 
             if (String.IsNullOrEmpty(splitData[2]) || String.IsNullOrWhiteSpace(splitData[2]))
@@ -50,7 +54,7 @@ namespace EffectiveMobile
             }
         }
 
-        public long GetID()
+        public ulong GetID()
         {
             return _id;
         }

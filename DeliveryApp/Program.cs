@@ -5,29 +5,33 @@
         static void Main(string[] args)
         {
             AppDomain currentDomain = AppDomain.CurrentDomain;
-            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(Utils.UnhandledExceptionHandler);
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(
+                Utils.UnhandledExceptionHandler
+            );
 
-            var appArguments = new AppArguments();
-            Logger.FilePath(appArguments.DeliveryLog);
-            Logger.MinLogLevel(LogLevel.Warning);
+            var appArguments = new AppArguments(args: args);
+            Logger.FilePath(filePath: appArguments.DeliveryLog);
+            Logger.MinLogLevel(level: LogLevel.Warning);
 
             var recordManager = new RecordManager();
 
             try
             {
-                using (StreamReader reader = new StreamReader(AppArguments.InputDataFileName))
+                using (StreamReader reader = new StreamReader(appArguments.InputDataFileName))
                 {
-                    recordManager.AddMultipleRecords(reader);
+                    recordManager.AddMultipleRecords(reader: reader);
                 }
             }
             catch (Exception ex)
             {
                 Logger.Log(
                     level: LogLevel.Error,
-                    message: $@"No such file or not permitted: ""{AppArguments.InputDataFileName}""",
+                    message: $@"No such file or not permitted: ""{appArguments.InputDataFileName}""",
                     ex: ex
                 );
-                Console.WriteLine($@"No such file or not permitted: ""{AppArguments.InputDataFileName}""");
+                Console.WriteLine(
+                    $@"No such file or not permitted: ""{appArguments.InputDataFileName}"""
+                );
                 Environment.Exit(0);
             }
 
