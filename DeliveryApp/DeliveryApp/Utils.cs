@@ -31,46 +31,46 @@ namespace EffectiveMobile
                 {
                     case "-i":
                     case "--inputData":
-                    {
-                        InputDataFileName = args[i + 1];
-                        break;
-                    }
+                        {
+                            InputDataFileName = args[i + 1];
+                            break;
+                        }
                     case "-d":
                     case "--cityDistrict":
-                    {
-                        CityDistrict = args[i + 1];
-                        break;
-                    }
+                        {
+                            CityDistrict = args[i + 1];
+                            break;
+                        }
                     case "-f":
                     case "--firstDeliveryDateTime":
-                    {
-                        if (
-                            !DateTime.TryParseExact(
-                                args[i + 1],
-                                Constants.DateTimeFormat,
-                                null,
-                                System.Globalization.DateTimeStyles.None,
-                                out FirstDeliveryDateTime
-                            )
-                        )
                         {
-                            Utils.DisplayHelp();
-                            Environment.Exit(0);
+                            if (
+                                !DateTime.TryParseExact(
+                                    args[i + 1],
+                                    Constants.DateTimeFormat,
+                                    null,
+                                    System.Globalization.DateTimeStyles.None,
+                                    out FirstDeliveryDateTime
+                                )
+                            )
+                            {
+                                Utils.DisplayHelp();
+                                Environment.Exit(0);
+                            }
+                            break;
                         }
-                        break;
-                    }
                     case "-l":
                     case "--deliveryLog":
-                    {
-                        DeliveryLog = args[i + 1];
-                        break;
-                    }
+                        {
+                            DeliveryLog = args[i + 1];
+                            break;
+                        }
                     case "-o":
                     case "--deliveryOrder":
-                    {
-                        DeliveryOrder = args[i + 1];
-                        break;
-                    }
+                        {
+                            DeliveryOrder = args[i + 1];
+                            break;
+                        }
                 }
             }
 
