@@ -1,34 +1,42 @@
-﻿namespace EffectiveMobile {
-  class Program {
-    static void Main(string[] args) {
-      AppDomain currentDomain = AppDomain.CurrentDomain;
-      currentDomain.UnhandledException +=
-          new UnhandledExceptionEventHandler(Utils.UnhandledExceptionHandler);
+﻿namespace EffectiveMobile
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.UnhandledException += new UnhandledExceptionEventHandler(Utils.UnhandledExceptionHandler);
 
-      string inputDataFileName =
-          Environment.GetEnvironmentVariable("EM_DELIVERY_DATA_FILENAME") ?? "./DeliveryData.csv";
-      var consoleArguments = new ConsoleArguments();
-      Logger.FilePath(consoleArguments.DeliveryLog);
-      Logger.MinLogLevel(LogLevel.Warning);
+            var appArguments = new AppArguments();
+            Logger.FilePath(appArguments.DeliveryLog);
+            Logger.MinLogLevel(LogLevel.Warning);
 
-      var recordManager = new RecordManager();
+            var recordManager = new RecordManager();
 
-      try {
-        using (StreamReader reader = new StreamReader(inputDataFileName)) {
-          recordManager.AddMultipleRecords(reader);
+            try
+            {
+                using (StreamReader reader = new StreamReader(AppArguments.InputDataFileName))
+                {
+                    recordManager.AddMultipleRecords(reader);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Log(
+                    level: LogLevel.Error,
+                    message: $@"No such file or not permitted: ""{AppArguments.InputDataFileName}""",
+                    ex: ex
+                );
+                Console.WriteLine($@"No such file or not permitted: ""{AppArguments.InputDataFileName}""");
+                Environment.Exit(0);
+            }
+
+            var filteredData = recordManager.FilterRecords(
+                cityDistrict: appArguments.CityDistrict,
+                firstDeliveryDateTime: appArguments.FirstDeliveryDateTime
+            );
+
+            Utils.WriteOutput(deliveryRecords: filteredData, appArguments: appArguments);
         }
-      } catch (Exception ex) {
-        Logger.Log(level: LogLevel.Error,
-                   $@"No such file or not permitted: ""{inputDataFileName}""", ex);
-        Console.WriteLine($@"No such file or not permitted: ""{inputDataFileName}""");
-        Environment.Exit(0);
-      }
-
-      var filteredData = recordManager.FilterRecords(
-          cityDistrict: consoleArguments.CityDistrict,
-          firstDeliveryDateTime: consoleArguments.FirstDeliveryDateTime);
-
-      Utils.WriteOutput(deliveryRecords: filteredData, consoleArguments: consoleArguments);
     }
-  }
 }
