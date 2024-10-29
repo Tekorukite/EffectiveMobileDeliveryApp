@@ -44,7 +44,7 @@ The program should be executed with command-line arguments.
   - `--deliveryOrder` | `-o` - path to the file that will contain filtered
     results.
 
-## Examples:
+## Examples
 
 `DeliveryApp --cityDistrict Bronx`
 
@@ -53,3 +53,7 @@ The program should be executed with command-line arguments.
 `DeliveryApp --cityDistrict Bronx --deliverOrder "~/orders/delivery_app_order.txt"`
 
 `DeliveryApp -i "/home/user/data/InputData.csv" -d Bronx -f "2024-11-02 01:23:45" -l "~/.log/Delivery.log" -o "~/DeliveryOrder.txt"`
+
+## Testing
+
+Run in root directory of the repository following command: `dotnet test`.

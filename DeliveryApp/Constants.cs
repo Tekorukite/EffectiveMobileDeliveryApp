@@ -6,7 +6,7 @@ namespace EffectiveMobile
         public const int DeliverySpanMinutes = 30;
         public const char DataDelimeter = ';';
         public const string HelpMessage =
-            @"EffectiveMobile DeliveryApp usage:
+            $@"EffectiveMobile DeliveryApp usage:
 DeliveryApp [--help] [--option1 value1] [--option2 value2] ...
 
 Options:
