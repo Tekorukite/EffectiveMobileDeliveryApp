@@ -4,91 +4,105 @@ namespace EffectiveMobile
     {
         internal static string _currentDirectory = Environment.CurrentDirectory;
 
-        public string InputDataFileName =
-            Environment.GetEnvironmentVariable("EM_DELIVERY_DATA")
-            ?? _currentDirectory + "/DeliveryData.csv";
+        public string InputDataFileName;
 
         public string CityDistrict;
-        public DateTime FirstDeliveryDateTime = DateTime.Now;
-        public string DeliveryLog =
-            Environment.GetEnvironmentVariable("EM_DELIVERY_LOG")
-            ?? _currentDirectory + "/DeliveryApp.log";
-        public string DeliveryOrder =
-            Environment.GetEnvironmentVariable("EM_DELIVERY_ORDER")
-            ?? _currentDirectory + "/DeliveryOrder.txt";
+        public DateTime FirstDeliveryDateTime;
+        public string DeliveryLog;
+        public string DeliveryOrder;
         public string DeliveryOrderJson;
 
-        public AppArguments(string[] args)
+        public AppArguments()
         {
-            if (args.Length < 2 || args[1] == "--help" || args[1] == "-h")
-            {
-                Utils.DisplayHelp();
-                Environment.Exit(0);
-            }
+            InputDataFileName = Path.GetFullPath(
+                Environment.GetEnvironmentVariable("EM_DELIVERY_DATA")
+                    ?? _currentDirectory + "/DeliveryData.csv"
+            );
 
+            FirstDeliveryDateTime = DateTime.Now;
+
+            DeliveryLog = Path.GetFullPath(
+                Environment.GetEnvironmentVariable("EM_DELIVERY_LOG")
+                    ?? _currentDirectory + "/DeliveryApp.log"
+            );
+
+            CityDistrict = String.Empty;
+
+            DeliveryOrder = Path.GetFullPath(
+                Environment.GetEnvironmentVariable("EM_DELIVERY_ORDER")
+                    ?? _currentDirectory + "/DeliveryOrder.txt"
+            );
+
+            DeliveryOrderJson = Path.GetFullPath(
+                Path.GetDirectoryName(DeliveryOrder)
+                    + "/"
+                    + Path.GetFileNameWithoutExtension(DeliveryOrder)
+                    + ".json"
+            );
+        }
+
+        public void Parse(string[] args)
+        {
             for (int i = 0; i < args.Length - 1; ++i)
             {
                 switch (args[i])
                 {
                     case "-i":
                     case "--inputData":
-                        {
-                            InputDataFileName = args[i + 1];
-                            break;
-                        }
+                    {
+                        InputDataFileName = Path.GetFullPath(args[i + 1]);
+                        break;
+                    }
                     case "-d":
                     case "--cityDistrict":
-                        {
-                            CityDistrict = args[i + 1];
-                            break;
-                        }
+                    {
+                        CityDistrict = args[i + 1];
+                        break;
+                    }
                     case "-f":
                     case "--firstDeliveryDateTime":
-                        {
-                            if (
-                                !DateTime.TryParseExact(
-                                    args[i + 1],
-                                    Constants.DateTimeFormat,
-                                    null,
-                                    System.Globalization.DateTimeStyles.None,
-                                    out FirstDeliveryDateTime
-                                )
+                    {
+                        if (
+                            !DateTime.TryParseExact(
+                                args[i + 1],
+                                Constants.DateTimeFormat,
+                                null,
+                                System.Globalization.DateTimeStyles.None,
+                                out FirstDeliveryDateTime
                             )
-                            {
-                                Utils.DisplayHelp();
-                                Environment.Exit(0);
-                            }
-                            break;
+                        )
+                        {
+                            throw new InvalidCastException(
+                                $@"DateTime String can't be parsed. String: ""{args[i + 1]}"" Expected format: ""{Constants.DateTimeFormat}"""
+                            );
                         }
+                        break;
+                    }
                     case "-l":
                     case "--deliveryLog":
-                        {
-                            DeliveryLog = args[i + 1];
-                            break;
-                        }
+                    {
+                        DeliveryLog = Path.GetFullPath(args[i + 1]);
+                        break;
+                    }
                     case "-o":
                     case "--deliveryOrder":
-                        {
-                            DeliveryOrder = args[i + 1];
-                            break;
-                        }
+                    {
+                        DeliveryOrder = Path.GetFullPath(args[i + 1]);
+                        break;
+                    }
                 }
             }
 
-            DeliveryOrder = String.IsNullOrEmpty(Path.GetDirectoryName(DeliveryOrder))
-                ? _currentDirectory + "/" + Path.GetFileName(DeliveryOrder)
-                : Path.GetDirectoryName(DeliveryOrder) + "/" + Path.GetFileName(DeliveryOrder);
-
-            DeliveryOrderJson =
+            DeliveryOrderJson = Path.GetFullPath(
                 Path.GetDirectoryName(DeliveryOrder)
-                + "/"
-                + Path.GetFileNameWithoutExtension(DeliveryOrder)
-                + ".json";
+                    + "/"
+                    + Path.GetFileNameWithoutExtension(DeliveryOrder)
+                    + ".json"
+            );
 
             if (String.IsNullOrEmpty(CityDistrict) || String.IsNullOrWhiteSpace(CityDistrict))
             {
-                Utils.DisplayHelp();
-                Environment.Exit(0);
+                throw new InvalidDataException("City district can't be empty.");
             }
         }
     }

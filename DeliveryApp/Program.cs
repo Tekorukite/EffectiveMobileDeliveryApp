@@ -4,12 +4,31 @@
     {
         static void Main(string[] args)
         {
+            if (args[0] == "--help" || args[0] == "-h" || args.Length < 2)
+            {
+                Utils.DisplayHelp();
+                Environment.Exit(0);
+            }
+
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.UnhandledException += new UnhandledExceptionEventHandler(
                 Utils.UnhandledExceptionHandler
             );
 
-            var appArguments = new AppArguments(args: args);
+            AppArguments appArguments = new AppArguments();
+
+            try
+            {
+                appArguments.Parse(args);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+
+                Utils.DisplayHelp();
+                Environment.Exit(0);
+            }
+
             Logger.FilePath(filePath: appArguments.DeliveryLog);
             Logger.MinLogLevel(level: LogLevel.Warning);
 

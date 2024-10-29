@@ -19,12 +19,13 @@ namespace EffectiveMobile.Tests.Utils
                 "2000-01-01 00:00:00",
             ];
 
-            var appArgs = new EffectiveMobile.AppArguments(args: args);
+            var appArgs = new EffectiveMobile.AppArguments();
+            appArgs.Parse(args);
 
-            Assert.Equal("./data.csv", appArgs.InputDataFileName);
-            Assert.Equal("./output.log", appArgs.DeliveryLog);
-            Assert.Equal("./output.txt", appArgs.DeliveryOrder);
-            Assert.Equal("./output.json", appArgs.DeliveryOrderJson);
+            Assert.Equal(Path.GetFullPath("./data.csv"), appArgs.InputDataFileName);
+            Assert.Equal(Path.GetFullPath("./output.log"), appArgs.DeliveryLog);
+            Assert.Equal(Path.GetFullPath("./output.txt"), appArgs.DeliveryOrder);
+            Assert.Equal(Path.GetFullPath("./output.json"), appArgs.DeliveryOrderJson);
             Assert.Equal("Bronx", appArgs.CityDistrict);
             Assert.Equal(DateTime.Parse("2000-01-01 00:00:00"), appArgs.FirstDeliveryDateTime);
         }
@@ -33,14 +34,40 @@ namespace EffectiveMobile.Tests.Utils
         public void AppArgumentsDistrictOnly()
         {
             var dateTimeNow = DateTime.Now;
-            var appArgs = new EffectiveMobile.AppArguments(["--cityDistrict", "Arbat"]);
+            var appArgs = new EffectiveMobile.AppArguments();
+            appArgs.Parse(["--cityDistrict", "Arbat"]);
             string currentDir = EffectiveMobile.AppArguments._currentDirectory;
 
-            Assert.Equal(currentDir + "/DeliveryData.csv", appArgs.InputDataFileName);
-            Assert.Equal(currentDir + "/DeliveryOrder.txt", appArgs.DeliveryOrder);
-            Assert.Equal(currentDir + "/DeliveryOrder.json", appArgs.DeliveryOrderJson);
-            Assert.Equal(currentDir + "/DeliveryApp.log", appArgs.DeliveryLog);
+            Assert.Equal(
+                Path.GetFullPath(currentDir + "/DeliveryData.csv"),
+                appArgs.InputDataFileName
+            );
+            Assert.Equal(
+                Path.GetFullPath(currentDir + "/DeliveryOrder.txt"),
+                appArgs.DeliveryOrder
+            );
+            Assert.Equal(
+                Path.GetFullPath(currentDir + "/DeliveryOrder.json"),
+                appArgs.DeliveryOrderJson
+            );
+            Assert.Equal(Path.GetFullPath(currentDir + "/DeliveryApp.log"), appArgs.DeliveryLog);
             Assert.True((appArgs.FirstDeliveryDateTime - dateTimeNow).TotalSeconds < 1);
+        }
+
+        [Fact]
+        public void AppArgumentsEmptyDistrict()
+        {
+            var appArgs = new EffectiveMobile.AppArguments();
+            Assert.Throws<InvalidDataException>(() => appArgs.Parse(["-i", "input.data"]));
+        }
+
+        [Fact]
+        public void AppArgumentsInvalidDate()
+        {
+            var appArgs = new EffectiveMobile.AppArguments();
+            Assert.Throws<InvalidCastException>(
+                () => appArgs.Parse(["-d", "Bronx", "-f", "2000/01/01 00:00:02"])
+            );
         }
 
         [Fact]
@@ -52,12 +79,13 @@ namespace EffectiveMobile.Tests.Utils
 
             string[] args = ["-d", "Bronx"];
 
-            var appArgs = new EffectiveMobile.AppArguments(args: args);
+            var appArgs = new EffectiveMobile.AppArguments();
+            appArgs.Parse(args);
 
-            Assert.Equal("/etc/delivery.csv", appArgs.InputDataFileName);
-            Assert.Equal("/var/log/delivery.log", appArgs.DeliveryLog);
-            Assert.Equal("/home/delivery/order.txt", appArgs.DeliveryOrder);
-            Assert.Equal("/home/delivery/order.json", appArgs.DeliveryOrderJson);
+            Assert.Equal(Path.GetFullPath("/etc/delivery.csv"), appArgs.InputDataFileName);
+            Assert.Equal(Path.GetFullPath("/var/log/delivery.log"), appArgs.DeliveryLog);
+            Assert.Equal(Path.GetFullPath("/home/delivery/order.txt"), appArgs.DeliveryOrder);
+            Assert.Equal(Path.GetFullPath("/home/delivery/order.json"), appArgs.DeliveryOrderJson);
             Assert.Equal("Bronx", appArgs.CityDistrict);
 
             Environment.SetEnvironmentVariable("EM_DELIVERY_DATA", "");
