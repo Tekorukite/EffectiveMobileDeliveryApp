@@ -46,13 +46,10 @@ The program should be executed with command-line arguments.
 
 ## Examples:
 
-> DeliveryApp --cityDistrict Bronx
+`DeliveryApp --cityDistrict Bronx`
 
-> DeliveryApp --cityDistrict Glen Cove" --firstDeliveryDateTime 2024-12-31
-> 11:22:33"
+`DeliveryApp --cityDistrict "Glen Cove" --firstDeliveryDateTime "2024-12-31 11:22:33"`
 
-> DeliveryApp --cityDistrict Bronx --deliverOrder
-> "~/orders/delivery_app_order.txt"
+`DeliveryApp --cityDistrict Bronx --deliverOrder "~/orders/delivery_app_order.txt"`
 
-> DeliveryApp -i "/home/user/data/InputData.csv" -d Bronx -f "2024-11-02
-> 01:23:45" -l "~/.log/Delivery.log" -o "~/DeliveryOrder.txt"
+`DeliveryApp -i "/home/user/data/InputData.csv" -d Bronx -f "2024-11-02 01:23:45" -l "~/.log/Delivery.log" -o "~/DeliveryOrder.txt"`
